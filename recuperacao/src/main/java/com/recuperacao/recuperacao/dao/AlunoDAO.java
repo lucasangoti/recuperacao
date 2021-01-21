@@ -13,9 +13,9 @@ public class AlunoDAO implements DAO<Aluno> {
 
 	private String selecionaTodos = "select * from alunos";
 	private String selecionaPorCod = "select * from alunos where codaluno=?";
-	private String atualizaPorCod = "update alunos set nome = ? where codaluno=?";
+	private String atualizaPorCod = "update alunos set nome =?, idade=?, email=? where codaluno=?";
 	private String exclui = "delete from alunos where codaluno=?";
-	private String criar = "inser into alunos(nome) values (?)";
+	private String criar = "insert into alunos(nome, idade, email) values (?, ?, ?)";
 	
 	
 	Connection conexao;
@@ -35,7 +35,7 @@ public class AlunoDAO implements DAO<Aluno> {
 			consulta.setInt(1, cod);
 			ResultSet retorno = consulta.executeQuery();
 			retorno.next();
-			aluno = new Aluno(cod,retorno.getString("nome"));
+			aluno = new Aluno(cod,retorno.getString("nome"),retorno.getInt("idade"), retorno.getString("email"));
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -48,6 +48,8 @@ public class AlunoDAO implements DAO<Aluno> {
 		try {
 			consulta = conexao.prepareStatement(criar);
 			consulta.setString(1, entity.getNome());
+			consulta.setInt(2, entity.getIdade());
+			consulta.setString(3, entity.getEmail());
 			consulta.execute();
 			} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -60,12 +62,16 @@ public class AlunoDAO implements DAO<Aluno> {
 		try {
 			consulta = conexao.prepareStatement(atualizaPorCod);
 			consulta.setString(1, entity.getNome());
-			consulta.setInt(2, entity.getCodaluno());
+			consulta.setInt(2, entity.getIdade());
+			consulta.setString(3, entity.getEmail());
+			consulta.setInt(4, entity.getCodaluno());
 			consulta.execute();
 			} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
 	}
+
+	
 
 	@Override
 	public void excluir(int cod) {
@@ -85,7 +91,7 @@ public class AlunoDAO implements DAO<Aluno> {
 			consulta = conexao.prepareStatement(selecionaTodos);
 			ResultSet retorno = consulta.executeQuery();
 			while (retorno.next()) {
-				Aluno aluno = new Aluno(retorno.getInt("codaluno"),retorno.getString("nome"));
+				Aluno aluno = new Aluno(retorno.getInt("codaluno"),retorno.getString("nome"), retorno.getInt("idade"), retorno.getString("email"));
 				lista.add(aluno);
 			}
 		} catch (SQLException e) {

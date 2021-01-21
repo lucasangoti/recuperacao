@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="fragments/layout">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Users</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<body>
+	<div th:fragment="conteudo">
+		<div class="container my-2">
+			<div class="card">
+				<div class="card-body">
+					<div th:switch="${alunos}" class="container my-5">
+						<p class="my-5">
+							<a href="/cadastrar-aluno" class="btn btn-secondary"> <span
+								class="material-icons align-middle mx-auto">add</span>
+								<th class="align-middle mx-auto">Novo Aluno</th>
+							</a>
+						</p>
+						<div class="col-md-12">
+							<h2 th:case="null">Nenhum aluno cadastrado.</h2>
+							<div th:case="*">
+								<table class="table table-striped table-responsive-md">
+									<thead>
+										<tr>
+											<th class="col-md-auto">Cód.</th>
+											<th class="col-md-auto">Aluno</th>
+                                            <th class="col-md-auto">Idade</th>
+                                            <th class="col-md-auto">E-mail</th>
+											<th class="col-md-auto">Editar</th>
+											<th class="col-md-auto">Excluir</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="aluno : ${alunos}">
+											<td th:text="${aluno.codaluno}"></td>
+											<td th:text="${aluno.nome}"></td>
+                                            <td th:text="${aluno.idade}"></td>
+                                            <td th:text="${aluno.email}"></td>
+											<td><a th:href="@{/editar(id=${aluno.codaluno})}"
+												class="btn btn-dark"> <span class="material-icons">edit</span>
+											</a></td>
+											<td><a th:href="@{/excluir(id=${aluno.codaluno})}"
+												class="btn btn-dark"> <span class="material-icons">delete</span>
+											</a></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
